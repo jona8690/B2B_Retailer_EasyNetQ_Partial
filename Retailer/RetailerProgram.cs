@@ -26,8 +26,8 @@ namespace Retailer
                 // Listen for order request messages from customers
                 bus.Receive<OrderRequestMessage>("customerToRetailerQueue", message => HandleOrderRequest(message));
 
-                // Listen for order reply messages from warehouses (use a point-to-point channel).
-                // WRITE CODE HERE!
+				// Listen for order reply messages from warehouses (use a point-to-point channel).
+				bus.Receive<OrderReplyMessage>("warehouseToRetailerQueue",  message => HandleOrderReply(message));
 
                 // Block this thread so that the retailer program will not exit.
                 Console.ReadLine();
@@ -39,8 +39,8 @@ namespace Retailer
         {
             message.OrderId = ++orderId;
 
-            // Send an order request message to all warehouses (publish-subscribe channel).
-            // WRITE CODE HERE!
+			// Send an order request message to all warehouses (publish-subscribe channel).
+			bus.Publish<OrderRequestMessage>(message);
 
             lock (lockObject)
             {
