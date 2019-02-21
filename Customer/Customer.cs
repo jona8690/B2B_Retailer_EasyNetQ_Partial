@@ -35,11 +35,11 @@ namespace Customer
 
             using (IBus bus = RabbitHutch.CreateBus("host=localhost;persistentMessages=false"))
             {
-                // Listen to reply messages from the Retailer (use Topic Based Routing).
-                // WRITE CODE HERE!
+				// Listen to reply messages from the Retailer (use Topic Based Routing).
+				bus.Subscribe<OrderReplyMessage>(request.CustomerId.ToString(), HandleOrderEvent);
 
-                // Send an order request message to the Retailer (use a point-to-point channel).
-                // WRITE CODE HERE!
+				// Send an order request message to the Retailer (use a point-to-point channel).
+				bus.Send("customerToRetailerQueue", request);
 
                 // Block this thread so that the customer instance will not exit.
                 Console.ReadLine();
